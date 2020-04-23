@@ -1,14 +1,5 @@
 #include QMK_KEYBOARD_H
-
-// Layers
-#define _BASE 0
-#define _WOW 1
-#define _FUNCTIONS 2
-
-// Colors
-#define JR_RED 0, 255, 125
-#define JR_WHITE 0, 0, 125
-#define JR_AZURE 132, 200, 125
+#include "values.h"
 
 // Pull in my tapdance definitions
 #include "tapdance.c"
@@ -27,59 +18,120 @@ keymap_config_t keymap_config;
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT_65_ansi_blocker(
-        KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,          KC_EQL,  KC_BSPC, KC_DEL,  \
-        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,          KC_RBRC, KC_BSLS, TD(TAPEND), \
-        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,                   KC_ENT,  KC_PGUP, \
-        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,                   KC_UP,   KC_PGDN, \
-        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, TD(MAGIC),   KC_LEFT, KC_DOWN, KC_RGHT  \
+        KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS, KC_EQL,  KC_BSPC, KC_DEL,  \
+        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC, KC_RBRC, KC_BSLS, TD(HME), \
+        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,          KC_ENT,  KC_VOLU, \
+        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,          KC_UP,   TD(MUT), \
+        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, TD(FN),  KC_LEFT, KC_DOWN, KC_RGHT  \
     ),
     [_WOW] = LAYOUT_65_ansi_blocker(
-        KC_GESC, KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_MINS,          KC_EQL,  KC_BSPC, KC_DEL,  \
-        KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_LBRC,          KC_RBRC, KC_BSLS, TD(TAPEND), \
-        KC_CAPS, KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT,                   KC_ENT,  KC_PGUP, \
-        KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_RSFT,                   KC_UP,   KC_PGDN, \
-        KC_LCTL, KC_LGUI, KC_LALT,                            KC_SPC,                             KC_RALT, TD(MAGIC),   KC_LEFT, KC_DOWN, KC_RGHT  \
+        _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, \
+        _______, _______, _______, _______, _______, KC_T,    _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, KC_F,    KC_G,    _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______,                   _______,                            _______, TD(FN),  _______, _______, _______  \
     ),
     [_FUNCTIONS] = LAYOUT_65_ansi_blocker(
-        KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  XXXXXXX, KC_MUTE, \
-        XXXXXXX, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, XXXXXXX, U_T_AUTO,U_T_AGCR,XXXXXXX, KC_PSCR, KC_SLCK, KC_PAUS, XXXXXXX, KC_END, \
-        XXXXXXX, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX, KC_VOLU, \
-        XXXXXXX, RGB_TOG, XXXXXXX, XXXXXXX, XXXXXXX, MD_BOOT, NK_TOGG, DBG_TOG, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          KC_PGUP, KC_VOLD, \
-        XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX,                            XXXXXXX, XXXXXXX, KC_HOME, KC_PGDN, KC_END  \
+        KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  XXXXXXX, XXXXXXX, \
+        XXXXXXX, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, XXXXXXX, U_T_AUTO,U_T_AGCR,XXXXXXX, KC_PSCR, KC_SLCK, KC_PAUS, XXXXXXX, XXXXXXX, \
+        XXXXXXX, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX, XXXXXXX, \
+        XXXXXXX, RGB_TOG, XXXXXXX, XXXXXXX, XXXXXXX, MD_BOOT, NK_TOGG, DBG_TOG, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          KC_PGUP, XXXXXXX, \
+        XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX,                            XXXXXXX, XXXXXXX, KC_HOME, KC_PGDN, KC_END   \
     )
 };
 
+// Enables color layer passthrough below
+
+#ifdef _______
+#undef _______
+#define _______ {0, 0, 0}
+
+const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
+    [_WOW] = {
+        RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
+        RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
+        RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
+        RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
+        RED,     RED,     RED,                                RED,                                RED,     RED,     RED,     RED,     RED,     \
+        _______\
+    },
+    // Note the above extra line is the underglow coloring.
+    [_FUNCTIONS] = {
+        AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   _______, _______, \
+        _______, AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   _______, AZURE,   AZURE,   _______, AZURE,   AZURE,   AZURE,   _______, _______, \
+        _______, AZURE,   AZURE,   AZURE,   AZURE,   AZURE,   _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, AZURE,   _______, _______, _______, RED,     AZURE,   AZURE,   _______, _______, _______, _______,          CYAN,    _______, \
+        _______, _______, _______,                            _______,                            _______, _______, CYAN,    CYAN,    CYAN,    \
+        _______\
+    }
+};
+
+// Reset again
+#undef _______
+#define _______ KC_TRNS
+#endif
+
+// Runs just one time when the keyboard initializes.
+void keyboard_post_init_user(void) {
+    rgb_matrix_enable();
+}
+
 // Runs just one time when the keyboard initializes.
 void matrix_init_user(void) {
-    rgb_matrix_mode(RGB_MATRIX_SOLID_COLOR);
-    rgb_matrix_sethsv_noeeprom(JR_WHITE);
+    #ifdef CONSOLE_ENABLE
+        debug_enable=true;
+        debug_matrix=true;
+        debug_keyboard=true;
+        debug_mouse=true;
+    #endif
 };
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
+
 };
 
 #define MODS_SHIFT  (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
 #define MODS_CTRL  (get_mods() & MOD_BIT(KC_LCTL) || get_mods() & MOD_BIT(KC_RCTRL))
 #define MODS_ALT  (get_mods() & MOD_BIT(KC_LALT) || get_mods() & MOD_BIT(KC_RALT))
 
-layer_state_t layer_state_set_user(layer_state_t state) {
-    switch (get_highest_layer(state)) {
-    case _WOW:
-    	rgb_matrix_sethsv_noeeprom(JR_RED);
-    	break;
-    case _FUNCTIONS:
-        rgb_matrix_sethsv_noeeprom(JR_AZURE);
-        break;
-    default:
-    	rgb_matrix_sethsv_noeeprom(JR_WHITE);
-    	break;
+void set_layer_color(int layer) {
+    for (int i = 0; i < DRIVER_LED_TOTAL; i++) {
+        int led = i;
+        if (led >= 67) {
+            led = 67;
+        }
+        HSV hsv;
+        if (layer == 0) {
+            hsv.h = 0;
+            hsv.s = 0;
+            hsv.v = 125;
+        } else {
+            hsv.h = pgm_read_byte(&ledmap[layer][led][0]);
+            hsv.s = pgm_read_byte(&ledmap[layer][led][1]);
+            hsv.v = pgm_read_byte(&ledmap[layer][led][2]);
+        }
+        if (hsv.h || hsv.s || hsv.v) {
+            RGB rgb = hsv_to_rgb(hsv);
+            float f = (float)rgb_matrix_config.hsv.v / UINT8_MAX;
+            rgb_matrix_set_color(i, f * rgb.r, f * rgb.g, f * rgb.b);
+        } else if (layer != 0) {
+            // Only deactivate non-defined key LEDs at layers other than Base.
+            // If the values are all false then it's a transparent key and deactivate LED at this layer
+            rgb_matrix_set_color(i, 0, 0, 0);
+        }
     }
-    return state;
 }
 
+void rgb_matrix_indicators_user(void) {
+    set_layer_color(get_highest_layer(layer_state));
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    #ifdef CONSOLE_ENABLE
+        uprintf("KL: kc: %u, col: %u, row: %u, pressed: %u\n", keycode, record->event.key.col, record->event.key.row, record->event.pressed);
+    #endif 
+
     static uint32_t key_timer;
 
     switch (keycode) {

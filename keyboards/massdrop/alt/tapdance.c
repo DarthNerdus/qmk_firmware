@@ -22,8 +22,9 @@ void ql_reset (qk_tap_dance_state_t *state, void *user_data);
 
 // Define my personal tapdance names
 enum {
-    MAGIC = 0,
-    TAPEND,
+    FN = 0,
+    HME,
+    MUT,
 };
 
 //Determine the current tap dance state
@@ -79,6 +80,7 @@ void ql_reset (qk_tap_dance_state_t *state, void *user_data) {
 
 // Define my personal tapdance actions
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [TAPEND] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_END),
-    [MAGIC] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ql_finished, ql_reset, 275)
+    [HME] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_END),
+    [FN] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ql_finished, ql_reset, 275),
+    [MUT] = ACTION_TAP_DANCE_DOUBLE(KC_VOLD, KC_MUTE),
 };
