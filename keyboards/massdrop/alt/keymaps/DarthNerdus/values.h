@@ -4,13 +4,13 @@
 #define _FUNCTIONS 2
 
 // Personal Colors
-#define JR_RED 0, 255, 125
+#define RED {0, 255, 150}
 #define JR_WHITE 0, 0, 125
 #define JR_AZURE 132, 200, 125
 
 // RGB Stuff
 extern rgb_config_t rgb_matrix_config;
-#define RED {HSV_RED}
+#define BRED {HSV_RED}
 #define CORAL {HSV_CORAL}
 #define ORANGE {HSV_ORANGE}
 #define GOLDEN {HSV_GOLDENROD}

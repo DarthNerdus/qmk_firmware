@@ -4,27 +4,22 @@ typedef struct {
   int state;
 } tap;
 
-//Define a type for as many tap dance states as you need
+// Stages of key presses
 enum {
   SINGLE_TAP = 1,
   SINGLE_HOLD = 2,
-  DOUBLE_TAP = 3
+  DOUBLE_TAP = 3,
+  DOUBLE_HOLD = 4
 };
-
-//Declare the functions to be used with your tap dance key(s)
-
-//Function associated with all tap dances
-int cur_dance (qk_tap_dance_state_t *state);
-
-//Functions associated with individual tap dances
-void ql_finished (qk_tap_dance_state_t *state, void *user_data);
-void ql_reset (qk_tap_dance_state_t *state, void *user_data);
 
 // Define my personal tapdance names
 enum {
     FN = 0,
     HME,
     MUT,
+    GA,
+    ESC,
+    SES
 };
 
 //Determine the current tap dance state
@@ -36,21 +31,28 @@ int cur_dance (qk_tap_dance_state_t *state) {
       return SINGLE_HOLD;
     }
   } else if (state->count == 2) {
-    return DOUBLE_TAP;
+    if (!state->pressed) {
+      return DOUBLE_TAP;
+    } else {
+      return DOUBLE_HOLD;
+    }
   }
   else return 8;
 }
 
+//////
+// FN TAP DANCING
+//////
 //Initialize tap structure associated with example tap dance key
-static tap ql_tap_state = {
+static tap fn_tap_state = {
   .is_press_action = true,
   .state = 0
 };
 
 //Functions that control what our tap dance key does
-void ql_finished (qk_tap_dance_state_t *state, void *user_data) {
-  ql_tap_state.state = cur_dance(state);
-  switch (ql_tap_state.state) {
+void fn_finished (qk_tap_dance_state_t *state, void *user_data) {
+  fn_tap_state.state = cur_dance(state);
+  switch (fn_tap_state.state) {
     case SINGLE_TAP:
       layer_move(_BASE);  
       break;
@@ -70,17 +72,125 @@ void ql_finished (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
-void ql_reset (qk_tap_dance_state_t *state, void *user_data) {
+void fn_reset (qk_tap_dance_state_t *state, void *user_data) {
   //if the key was held down and now is released then switch off the layer
-  if (ql_tap_state.state==SINGLE_HOLD) {
+  if (fn_tap_state.state==SINGLE_HOLD) {
     layer_off(_FUNCTIONS);
   }
-  ql_tap_state.state = 0;
+  fn_tap_state.state = 0;
+}
+
+//////
+// G Assists
+//////
+//Initialize tap structure associated with example tap dance key
+static tap ga_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+//Functions that control what our tap dance key does
+void ga_finished (qk_tap_dance_state_t *state, void *user_data) {
+  ga_tap_state.state = cur_dance(state);
+  switch (ga_tap_state.state) {
+    case SINGLE_TAP:
+      tap_code(KC_G);
+      break;
+    case SINGLE_HOLD:
+      register_code(KC_LSFT);
+      tap_code(KC_G);
+      unregister_code(KC_LSFT);
+      break;
+    default:
+      break;
+  }
+}
+
+void ga_reset (qk_tap_dance_state_t *state, void *user_data) {
+  ga_tap_state.state = 0;
+}
+
+//////
+// Up-case forwards
+//////
+//Initialize tap structure associated with example tap dance key
+static tap uc_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+//Functions that control what our tap dance key does
+void uc_finished (qk_tap_dance_state_t *state, void *user_data) {
+  uc_tap_state.state = cur_dance(state);
+  switch (uc_tap_state.state) {
+    case SINGLE_TAP:
+      register_code(KC_W);
+      break;
+    case DOUBLE_TAP:
+      register_code(KC_W);
+      break;
+    case SINGLE_HOLD:
+      register_code(KC_W);
+      break;
+    case DOUBLE_HOLD:
+      unregister_code(KC_W);
+      register_code(KC_LALT);
+      register_code(KC_W);
+  }
+}
+
+void uc_start (qk_tap_dance_state_t *state, void *user_data) {
+  // register_code(KC_W);
+}
+
+void uc_reset (qk_tap_dance_state_t *state, void *user_data) {
+  unregister_code(KC_W);
+  switch (uc_tap_state.state) {
+    case DOUBLE_HOLD:
+      unregister_code(KC_LALT);
+      break;
+    }
+  uc_tap_state.state = 0;
+}
+
+//////
+// FN TAP DANCING
+//////
+//Initialize tap structure associated with example tap dance key
+static tap ses_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+//Functions that control what our tap dance key does
+void ses_finished (qk_tap_dance_state_t *state, void *user_data) {
+  ses_tap_state.state = cur_dance(state);
+  switch (ses_tap_state.state) {
+    case SINGLE_TAP:
+      tap_code(KC_DEL); 
+      break;
+    case DOUBLE_TAP: 
+      register_code(KC_LSFT);
+      tap_code(KC_ESC);
+      unregister_code(KC_LSFT);
+      break;
+  }
+}
+
+void ses_reset (qk_tap_dance_state_t *state, void *user_data) {
+  //if the key was held down and now is released then switch off the layer
+  if (ses_tap_state.state==SINGLE_HOLD) {
+    layer_off(_FUNCTIONS);
+  }
+  ses_tap_state.state = 0;
 }
 
 // Define my personal tapdance actions
 qk_tap_dance_action_t tap_dance_actions[] = {
     [HME] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_END),
-    [FN] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ql_finished, ql_reset, 275),
+    [FN] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, fn_finished, fn_reset, 200),
     [MUT] = ACTION_TAP_DANCE_DOUBLE(KC_VOLD, KC_MUTE),
+    [GA] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ga_finished, ga_reset, 200),
+    [ESC] = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_ESC),
+    [SES] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ses_finished, ses_reset, 200),
 };
