@@ -1,12 +1,15 @@
 // Layers
 #define _BASE 0
-#define _WOW 1
-#define _FUNCTIONS 2
+#define _MAC 1
+#define _WOW 2
+#define _FUNCTIONS 3
 
 // Personal Colors
 #define RED {0, 255, 150}
-#define JR_WHITE 0, 0, 125
-#define JR_AZURE 132, 200, 125
+#define JR_WHIT {0, 0, 125}
+#define JR_AZUR {132, 102, 175}
+#define JR_AZUN {132, 102, 100}
+#define CYANUND {128, 255, 100}
 
 // RGB Stuff
 extern rgb_config_t rgb_matrix_config;

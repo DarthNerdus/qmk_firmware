@@ -20,7 +20,8 @@ enum {
     MUT,
     GA,
     ESC,
-    SES
+    SES,
+    ALT
 };
 
 //Determine the current tap dance state
@@ -52,21 +53,27 @@ static tap fn_tap_state = {
   .state = 0
 };
 
+void move_to_current_base (void) {
+  if (layer_state_is(_MAC)) {
+    layer_move(_MAC);
+  } else {
+    layer_move(_BASE);
+  }
+}
+
 //Functions that control what our tap dance key does
 void fn_finished (qk_tap_dance_state_t *state, void *user_data) {
   fn_tap_state.state = cur_dance(state);
   switch (fn_tap_state.state) {
     case SINGLE_TAP:
-      layer_move(_BASE);  
+      move_to_current_base();
       break;
     case SINGLE_HOLD:
       layer_on(_FUNCTIONS);
       break;
     case DOUBLE_TAP: 
-      //check to see if the layer is already set
       if (layer_state_is(_WOW)) {
-        //if already set, then switch it off
-        layer_off(_WOW);
+        move_to_current_base();
       } else { 
         //if not already set, then switch the layer on
         layer_on(_WOW);
@@ -185,6 +192,36 @@ void ses_reset (qk_tap_dance_state_t *state, void *user_data) {
   ses_tap_state.state = 0;
 }
 
+//////
+// Alt Lead Override
+//////
+//Initialize tap structure associated with example tap dance key
+static tap alt_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+//Functions that control what our tap dance key does
+void alt_finished (qk_tap_dance_state_t *state, void *user_data) {
+  alt_tap_state.state = cur_dance(state);
+  switch (alt_tap_state.state) {
+    case SINGLE_TAP:
+      tap_code(KC_RALT);
+      break;
+    case SINGLE_HOLD:
+      register_code(KC_RALT);
+      break;
+    case DOUBLE_HOLD: 
+      qk_leader_start();
+      break;
+  }
+}
+
+void alt_reset (qk_tap_dance_state_t *state, void *user_data) {
+  unregister_code(KC_RALT);
+  alt_tap_state.state = 0;
+}
+
 // Define my personal tapdance actions
 qk_tap_dance_action_t tap_dance_actions[] = {
     [HME] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_END),
@@ -193,4 +230,5 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [GA] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ga_finished, ga_reset, 200),
     [ESC] = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_ESC),
     [SES] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(ses_start, ses_finished, ses_reset, 200),
+    [ALT] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, alt_finished, alt_reset, 200),
 };
