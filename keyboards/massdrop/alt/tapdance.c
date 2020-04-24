@@ -169,10 +169,6 @@ static tap ses_tap_state = {
 void ses_finished (qk_tap_dance_state_t *state, void *user_data) {
   ses_tap_state.state = cur_dance(state);
   switch (ses_tap_state.state) {
-    case SINGLE_TAP:
-    case DOUBLE_TAP:
-      tap_code(KC_DEL);
-      break;
     case TRIPLE_TAP: 
       register_code(KC_LSFT);
       tap_code(KC_ESC);
