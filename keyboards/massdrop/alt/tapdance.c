@@ -9,7 +9,8 @@ enum {
   SINGLE_TAP = 1,
   SINGLE_HOLD = 2,
   DOUBLE_TAP = 3,
-  DOUBLE_HOLD = 4
+  DOUBLE_HOLD = 4,
+  TRIPLE_TAP = 5
 };
 
 // Define my personal tapdance names
@@ -36,6 +37,8 @@ int cur_dance (qk_tap_dance_state_t *state) {
     } else {
       return DOUBLE_HOLD;
     }
+  } else if (state->count == 3) {
+    return TRIPLE_TAP;
   }
   else return 8;
 }
@@ -154,7 +157,7 @@ void uc_reset (qk_tap_dance_state_t *state, void *user_data) {
 }
 
 //////
-// FN TAP DANCING
+// SES Slack Escape
 //////
 //Initialize tap structure associated with example tap dance key
 static tap ses_tap_state = {
@@ -167,9 +170,10 @@ void ses_finished (qk_tap_dance_state_t *state, void *user_data) {
   ses_tap_state.state = cur_dance(state);
   switch (ses_tap_state.state) {
     case SINGLE_TAP:
-      tap_code(KC_DEL); 
+    case DOUBLE_TAP:
+      tap_code(KC_DEL);
       break;
-    case DOUBLE_TAP: 
+    case TRIPLE_TAP: 
       register_code(KC_LSFT);
       tap_code(KC_ESC);
       unregister_code(KC_LSFT);
@@ -177,11 +181,11 @@ void ses_finished (qk_tap_dance_state_t *state, void *user_data) {
   }
 }
 
+void ses_start (qk_tap_dance_state_t *state, void *user_data) {
+  tap_code(KC_DEL);
+}
+
 void ses_reset (qk_tap_dance_state_t *state, void *user_data) {
-  //if the key was held down and now is released then switch off the layer
-  if (ses_tap_state.state==SINGLE_HOLD) {
-    layer_off(_FUNCTIONS);
-  }
   ses_tap_state.state = 0;
 }
 
@@ -192,5 +196,5 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [MUT] = ACTION_TAP_DANCE_DOUBLE(KC_VOLD, KC_MUTE),
     [GA] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ga_finished, ga_reset, 200),
     [ESC] = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_ESC),
-    [SES] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ses_finished, ses_reset, 200),
+    [SES] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(ses_start, ses_finished, ses_reset, 200),
 };
