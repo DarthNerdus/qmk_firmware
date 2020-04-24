@@ -13,6 +13,7 @@ enum alt_keycodes {
     DBG_MOU,               //DEBUG Toggle Mouse Prints
     MD_BOOT,               //Restart into bootloader after hold timeout
     JR_1PWD,               //1Password muscle memory
+    WOW_C,                 //Tap for Alt+Space, Shift will sends Shift+C
 };
 
 keymap_config_t keymap_config;
@@ -27,9 +28,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_WOW] = LAYOUT_65_ansi_blocker(
         TD(ESC), KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, \
-        _______, _______, _______, _______, _______, KC_T,    _______, _______, _______, _______, _______, _______, _______, _______, _______, \
-        _______, _______, _______, _______, KC_F,    TD(GA),  _______, _______, _______, _______, _______, _______,          _______, _______, \
-        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______, _______, KC_F,    KC_T,    _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, TD(GA),  _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______, WOW_C,   _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, _______, _______,                            _______,                            _______, TD(FN),  _______, _______, _______  \
     ),
     [_FUNCTIONS] = LAYOUT_65_ansi_blocker(
@@ -50,9 +51,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     [_WOW] = {
         RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
-        RED,     RED,     BRED,    RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
-        RED,     BRED,    BRED,    BRED,    GREEN,   GREEN,   RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
-        RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
+        RED,     RED,     BRED,    RED,     GREEN,   RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
+        RED,     BRED,    BRED,    BRED,    GREEN,   RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
+        RED,     RED,     RED,     GREEN,   RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
         RED,     RED,     RED,                                RED,                                RED,     RED,     RED,     RED,     RED,     \
         _______\
     },
@@ -211,6 +212,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             register_code(KC_RCTRL);
             tap_code(KC_BSLS);
             unregister_code(KC_RCTRL);
+            return false;
+        case WOW_C:
+            if (record->event.pressed){
+                if (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT)){
+                    register_code(KC_C);
+                } else {
+                    register_code(KC_LALT);
+                    register_code(KC_SPC);
+                }
+            } else {
+                unregister_code(KC_LALT);
+                unregister_code(KC_SPC);
+                unregister_code(KC_C);
+            }
             return false;
         default:
             return true; //Process all other keycodes normally
