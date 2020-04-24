@@ -12,6 +12,7 @@ enum alt_keycodes {
     DBG_KBD,               //DEBUG Toggle Keyboard Prints
     DBG_MOU,               //DEBUG Toggle Mouse Prints
     MD_BOOT,               //Restart into bootloader after hold timeout
+    JR_1PWD,               //1Password muscle memory
 };
 
 keymap_config_t keymap_config;
@@ -33,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     ),
     [_FUNCTIONS] = LAYOUT_65_ansi_blocker(
         XXXXXXX, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  XXXXXXX, XXXXXXX, \
-        XXXXXXX, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, XXXXXXX, U_T_AUTO,U_T_AGCR,XXXXXXX, KC_PSCR, KC_SLCK, KC_PAUS, XXXXXXX, XXXXXXX, \
+        XXXXXXX, RGB_SPD, RGB_VAI, RGB_SPI, RGB_HUI, RGB_SAI, XXXXXXX, U_T_AUTO,U_T_AGCR,XXXXXXX, KC_PSCR, KC_SLCK, KC_PAUS, JR_1PWD, XXXXXXX, \
         XXXXXXX, RGB_RMOD,RGB_VAD, RGB_MOD, RGB_HUD, RGB_SAD, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          XXXXXXX, XXXXXXX, \
         XXXXXXX, RGB_TOG, XXXXXXX, XXXXXXX, XXXXXXX, MD_BOOT, NK_TOGG, DBG_TOG, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          KC_PGUP, XXXXXXX, \
         XXXXXXX, XXXXXXX, XXXXXXX,                            XXXXXXX,                            XXXXXXX, XXXXXXX, KC_HOME, KC_PGDN, KC_END   \
@@ -58,7 +59,7 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     // Note the above extra line is the underglow coloring.
     [_FUNCTIONS] = {
         _______, CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    _______, _______, \
-        _______, CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    _______, CYAN,    CYAN,    _______, CYAN,    CYAN,    CYAN,    _______, _______, \
+        _______, CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    _______, CYAN,    CYAN,    _______, CYAN,    CYAN,    CYAN,    GREEN,   _______, \
         _______, CYAN,    CYAN,    CYAN,    CYAN,    CYAN,    _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, CYAN,    _______, _______, _______, BRED,    CYAN,    CYAN,    _______, _______, _______, _______,          CYAN,    _______, \
         _______, _______, _______,                            _______,                            _______, _______, CYAN,    CYAN,    CYAN,    \
@@ -204,6 +205,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                   break;
               }
             }
+            return false;
+        // Maintain usual muscle member for 1Password
+        case JR_1PWD:
+            register_code(KC_RCTRL);
+            tap_code(KC_BSLS);
+            unregister_code(KC_RCTRL);
             return false;
         default:
             return true; //Process all other keycodes normally
