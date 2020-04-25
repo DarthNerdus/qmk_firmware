@@ -2,6 +2,7 @@
 typedef struct {
   bool is_press_action;
   int state;
+  int last_layer;
 } tap;
 
 // Stages of key presses
@@ -50,7 +51,8 @@ int cur_dance (qk_tap_dance_state_t *state) {
 //Initialize tap structure associated with example tap dance key
 static tap fn_tap_state = {
   .is_press_action = true,
-  .state = 0
+  .state = 0,
+  .last_layer = _BASE
 };
 
 void move_to_current_base (void) {
@@ -61,12 +63,22 @@ void move_to_current_base (void) {
   }
 }
 
+void swap_tofrom_base (void) {
+  // If we have layers on above MAC/BASE
+  if (get_highest_layer(layer_state) > 1) {
+    fn_tap_state.last_layer = get_highest_layer(layer_state);
+    move_to_current_base();
+  } else {
+    layer_on(fn_tap_state.last_layer);
+  }
+}
+
 //Functions that control what our tap dance key does
 void fn_finished (qk_tap_dance_state_t *state, void *user_data) {
   fn_tap_state.state = cur_dance(state);
   switch (fn_tap_state.state) {
     case SINGLE_TAP:
-      move_to_current_base();
+      swap_tofrom_base();
       break;
     case SINGLE_HOLD:
       layer_on(_FUNCTIONS);
