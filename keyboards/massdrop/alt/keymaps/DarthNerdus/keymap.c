@@ -65,11 +65,11 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
         JR_AZUN\
     },
     [_MAC] = {
-        JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, \
-        JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, \
-        JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR,          JR_AZUR, JR_AZUR, \
-        JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR,          JR_AZUR, JR_AZUR, \
-        JR_AZUR, JR_AZUR, JR_AZUR,                            JR_AZUR,                            JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, JR_AZUR, \
+        TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    \
+        TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    \
+        TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,             TEAL,    TEAL,    \
+        TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    TEAL,             TEAL,    TEAL,    \
+        TEAL,    TEAL,    TEAL,                               TEAL,                               TEAL,    TEAL,    TEAL,    TEAL,    TEAL,    \
         TEAL\
     },
     [_WOW] = {
