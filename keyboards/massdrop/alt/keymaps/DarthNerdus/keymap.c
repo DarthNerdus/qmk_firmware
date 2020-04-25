@@ -14,6 +14,8 @@ enum alt_keycodes {
     MD_BOOT,               //Restart into bootloader after hold timeout
     JR_1PWD,               //1Password muscle memory
     WOW_C,                 //Tap for Alt+Space, Shift will sends Shift+C
+    MB_BRD,                //Toggle broadcasting for MB
+    MB_KEY,                //Toggle keymaps for MB
 };
 
 keymap_config_t keymap_config;
@@ -34,8 +36,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, KC_LALT, KC_LGUI,                            _______,                            _______, _______, _______, _______, _______  \
     ),
     [_WOW] = LAYOUT_65_ansi_blocker(
-        TD(ESC), KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, _______, \
-        _______, _______, _______, _______, KC_F,    KC_T,    _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        TD(ESC), _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
+        _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______  \
+    ),
+    [_WOWMB] = LAYOUT_65_ansi_blocker(
+        TD(ESC), KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______, MB_BRD,  \
+        _______, _______, _______, _______, KC_F,    KC_T,    _______, _______, _______, _______, _______, _______, _______, _______, MB_KEY,  \
         _______, _______, _______, _______, TD(GA),  _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, _______, _______, WOW_C,   _______, _______, _______, _______, _______, _______, _______, _______,          _______, _______, \
         _______, _______, _______,                            _______,                            _______, _______, _______, _______, _______  \
@@ -74,7 +83,15 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     },
     [_WOW] = {
         RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
-        RED,     RED,     BRED,    RED,     GREEN,   RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
+        RED,     RED,     BRED,    RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     \
+        RED,     BRED,    BRED,    BRED,    RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
+        RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
+        RED,     RED,     RED,                                RED,                                RED,     RED,     RED,     RED,     RED,     \
+        _______\
+    },
+    [_WOWMB] = {
+        RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     GOLD,    \
+        RED,     RED,     BRED,    RED,     GREEN,   RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,     GOLD,    \
         RED,     BRED,    BRED,    BRED,    GREEN,   RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
         RED,     RED,     RED,     GREEN,   RED,     RED,     RED,     RED,     RED,     RED,     RED,     RED,              RED,     RED,     \
         RED,     RED,     RED,                                RED,                                RED,     RED,     RED,     RED,     RED,     \
@@ -267,6 +284,28 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 unregister_code(KC_LALT);
                 unregister_code(KC_SPC);
                 unregister_code(KC_C);
+            }
+            return false;
+        case MB_BRD:
+            if (record->event.pressed) {
+                register_code(KC_LSHIFT);
+                register_code(KC_LALT);
+                register_code(KC_R);
+            } else {
+                unregister_code(KC_LSHIFT);
+                unregister_code(KC_LALT);
+                unregister_code(KC_R);
+            }
+            return false;
+        case MB_KEY:
+            if (record->event.pressed) {
+                register_code(KC_LSHIFT);
+                register_code(KC_LALT);
+                register_code(KC_M);
+            } else {
+                unregister_code(KC_LSHIFT);
+                unregister_code(KC_LALT);
+                unregister_code(KC_M);
             }
             return false;
         default:

@@ -79,6 +79,14 @@ void fn_finished (qk_tap_dance_state_t *state, void *user_data) {
         layer_on(_WOW);
       }
       break;
+    case TRIPLE_TAP:
+      if (layer_state_is(_WOWMB)) {
+        move_to_current_base();
+      } else { 
+        //if not already set, then switch the layer on
+        layer_on(_WOWMB);
+      }
+      break;
   }
 }
 
