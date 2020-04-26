@@ -249,13 +249,59 @@ void alt_reset (qk_tap_dance_state_t *state, void *user_data) {
   alt_tap_state.state = 0;
 }
 
+//////
+// ESC/~/` Overrise
+//////
+
+static tap esc_tap_state = {
+  .is_press_action = true,
+  .state = 0
+};
+
+void esc_finished (qk_tap_dance_state_t *state, void *user_data) {
+  esc_tap_state.state = cur_dance(state);
+  switch (esc_tap_state.state) {
+    case SINGLE_TAP:
+      if (MODS_SHIFT) {
+        tap_code(KC_GRV);
+      } else if (MODS_SHIFT && MODS_CTRL) {
+        register_code(KC_LSFT);
+        register_code(KC_LCTRL);
+        tap_code(KC_ESC);
+        unregister_code(KC_LCTRL);
+        unregister_code(KC_LSFT);
+      } else {
+        if (get_highest_layer(layer_state) >= _WOW) {
+          tap_code(KC_GRV);
+        } else {
+          tap_code(KC_ESC);
+        }
+      }
+      break;
+    case DOUBLE_TAP: 
+      if (get_highest_layer(layer_state) >= _WOW) {
+        tap_code(KC_ESC);
+      } else {
+        SEND_STRING("`");
+      }
+      break;
+    case TRIPLE_TAP:
+      tap_code(KC_ESC);
+      break;
+  }
+}
+
+void esc_reset (qk_tap_dance_state_t *state, void *user_data) {
+  esc_tap_state.state = 0;
+}
+
 // Define my personal tapdance actions
 qk_tap_dance_action_t tap_dance_actions[] = {
     [HME] = ACTION_TAP_DANCE_DOUBLE(KC_HOME, KC_END),
     [FN] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, fn_finished, fn_reset, 200),
     [MUT] = ACTION_TAP_DANCE_DOUBLE(KC_VOLD, KC_MUTE),
     [GA] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, ga_finished, ga_reset, 200),
-    [ESC] = ACTION_TAP_DANCE_DOUBLE(KC_GRV, KC_ESC),
+    [ESC] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, esc_finished, esc_reset, 200),
     [SES] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(ses_start, ses_finished, ses_reset, 200),
     [ALT] = ACTION_TAP_DANCE_FN_ADVANCED_TIME(NULL, alt_finished, alt_reset, 200),
 };

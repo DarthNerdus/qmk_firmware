@@ -32,3 +32,8 @@ extern rgb_config_t rgb_matrix_config;
 #define PURPLE {HSV_PURPLE}
 #define MAGENTA {HSV_MAGENTA}
 #define PINK {HSV_PINK}
+
+// Shortcuts to check if CTRL/SHIFT/ALT are held.
+#define MODS_SHIFT  (get_mods() & MOD_BIT(KC_LSHIFT) || get_mods() & MOD_BIT(KC_RSHIFT))
+#define MODS_CTRL  (get_mods() & MOD_BIT(KC_LCTL) || get_mods() & MOD_BIT(KC_RCTRL))
+#define MODS_ALT  (get_mods() & MOD_BIT(KC_LALT) || get_mods() & MOD_BIT(KC_RALT))
