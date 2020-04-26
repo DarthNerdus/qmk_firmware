@@ -66,7 +66,14 @@ void move_to_current_base (void) {
 void swap_tofrom_base (void) {
   // If we have layers on above MAC/BASE
   if (get_highest_layer(layer_state) > 1) {
-    fn_tap_state.last_layer = get_highest_layer(layer_state);
+    switch (get_highest_layer(layer_state)){
+      case _WOWTYPE:
+        fn_tap_state.last_layer = _WOWMB;
+        break;
+      default:
+        fn_tap_state.last_layer = get_highest_layer(layer_state);
+        break;
+    }
     move_to_current_base();
   } else {
     layer_on(fn_tap_state.last_layer);

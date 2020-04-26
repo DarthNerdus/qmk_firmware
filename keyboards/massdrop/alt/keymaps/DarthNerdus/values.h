@@ -3,7 +3,8 @@
 #define _MAC 1
 #define _WOW 2
 #define _WOWMB 3
-#define _FUNCTIONS 4
+#define _WOWTYPE 4
+#define _FUNCTIONS 5
 
 // Personal Colors
 #define RED {0, 255, 150}
