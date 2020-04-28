@@ -167,8 +167,14 @@ void matrix_scan_user(void) {
     SEQ_ONE_KEY(KC_LEFT) {
         if (layer_state_is(_MAC)) {
             layer_move(_BASE);
+            register_code(KC_LALT);
+            tap_code(KC_S);
+            unregister_code(KC_LALT);
         } else {
             layer_move(_MAC);
+            register_code(KC_LALT);
+            tap_code(KC_S);
+            unregister_code(KC_LALT);
         }
     }
 
